@@ -4,7 +4,7 @@ from utils.image_decode import decode_image
 from utils.fingerprint_features import summarize_fingerprint
 from utils.tree_plot import draw_tree_rings_combined
 from gpt import build_prompt, call_gpt_mini
-from utils.telegram_bot import send_telegram
+from utils.telegram_bot import send_telegram_message
 import uuid
 import traceback
 
@@ -38,7 +38,7 @@ def analyze():
         message = f"이름: {name}\n전화번호: {phone}\n\n{result}"
 
         try:
-            send_telegram(message, img_path)
+            send_telegram_message(message, img_path)
         except Exception as e:
             print("❌ 텔레그램 전송 중 예외:", str(e))
 
