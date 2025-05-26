@@ -1,0 +1,33 @@
+# Python 환경 관련
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+env/
+
+# 환경 변수 파일 (보안)
+.env
+client_secrets.json
+temp_client_secrets.json
+
+
+# OS 관련 숨김 파일
+.DS_Store
+
+# 생성된 분석 이미지
+tree_*.png
+*.jpg
+*.jpeg
+*.png
+
+# 로그 및 캐시
+*.log
+*.sqlite3
+.cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+
