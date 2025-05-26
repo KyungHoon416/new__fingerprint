@@ -9,7 +9,9 @@ import traceback
 
 app = Flask(__name__)
 
-@app.route("/analyze", methods=["POST"])
+@app.route("/analyze/thumb", methods=["POST"])
+@app.route("/analyze/index", methods=["POST"])
+
 def analyze():
     try:
         data = request.get_json()
