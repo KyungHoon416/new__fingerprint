@@ -1,7 +1,6 @@
 import openai
 import os
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def build_prompt(left_txt, right_txt):
     return f"""
@@ -55,14 +54,15 @@ def build_prompt(left_txt, right_txt):
 {right_txt}
 
 """
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def call_gpt_mini(prompt):
-    res = openai.ChatCompletion.create(
-        model="gpt-4o-mini",
+    res = client.chat.completions.create(
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "너는 감성 지문 분석가야."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=1000
+        max_tokens=1200
     )
     return res.choices[0].message.content
