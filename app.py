@@ -34,6 +34,7 @@ def analyze():
 
         filename = f"tree_{uuid.uuid4().hex}.png"
         img_path = draw_tree_rings_combined(left_density, right_density, filename)
+        tree_image_url = f"https://fingerprint-jbdj.onrender.com/static/{filename}"  # Render 기준
 
         message = f"이름: {name}\n전화번호: {phone}\n\n[엄지 분석]\n{result1}\n\n[검지 분석]\n{result2}"
 
@@ -42,7 +43,11 @@ def analyze():
         except Exception as e:
             print("❌ 텔레그램 전송 중 예외:", str(e))
 
-        return jsonify({"result_thumb": result1, "result_index": result2})
+        return jsonify({
+            "result_thumb": result1,
+            "result_index": result2,
+            "tree_image_url": tree_image_url
+        })
 
     except Exception as e:
         print("❌ 서버 내부 오류:", str(e))
