@@ -3,7 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+from flask import url_for
+
 def draw_tree_rings_combined(left_density, right_density, filename="tree.png"):
+    import matplotlib.pyplot as plt
+    import os
+
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.set_facecolor("#fdf9f0")
     ax.axis("off")
@@ -17,8 +22,15 @@ def draw_tree_rings_combined(left_density, right_density, filename="tree.png"):
         circle = plt.Circle((0.5, 0.5), radius, color=color, fill=False, lw=lw)
         ax.add_artist(circle)
 
-    path = os.path.join("static", filename)
-    os.makedirs("static", exist_ok=True)
+    # 저장 경로
+    save_dir = os.path.join("static", "images")
+    os.makedirs(save_dir, exist_ok=True)
+    path = os.path.join(save_dir, filename)
+
     plt.savefig(path, dpi=150, bbox_inches="tight", transparent=True)
     plt.close()
-    return path
+
+    # Render에서 공개되는 정적 파일 경로로 URL 반환
+    return f"https://fingerprint-jbdj.onrender.com/static/images/{filename}"
+
+

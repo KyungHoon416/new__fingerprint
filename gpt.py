@@ -44,14 +44,7 @@ def build_prompt(left_txt, right_txt):
 - #자기보호 #유연한감정 #관계안의불균형 등 해시태그 형태
 
 ---
-
-전처리 요약은 다음과 같아:
-
-[왼손]
-{left_txt}
-
-[오른손]
-{right_txt}
+최고고급으로 심층분석해주라
 
 """
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -60,7 +53,7 @@ def call_gpt_mini(prompt):
     res = client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "너는 감성 지문 분석가야."},
+            {"role": "system", "content": "너는 감성 지문 분석가야. 최고고급으로 심층분석해주라"},
             {"role": "user", "content": prompt}
         ],
         max_tokens=1200
