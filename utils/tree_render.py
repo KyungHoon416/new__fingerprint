@@ -21,14 +21,17 @@ def fingerprint_to_tree_lines(img_pil):
         binary_inv = eroded.copy()
     return skel
 
-def visualize_tree_like_image(skeleton):
+
+def visualize_tree_black_lines_on_white_final(skeleton):
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.set_facecolor("white")
     ax.axis("off")
-    ax.imshow(skeleton, cmap='gray')
-
+    
+    for x, y in skeleton:
+        ax.plot(x, y, color="black", linewidth=0.8)
+    
     buf = io.BytesIO()
-    plt.savefig(buf, format="png", bbox_inches="tight", pad_inches=0)
-    plt.close(fig)
+    plt.savefig(buf, format="png", bbox_inches='tight', transparent=False)
     buf.seek(0)
+    plt.close()
     return buf
