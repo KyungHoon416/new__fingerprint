@@ -14,7 +14,8 @@ def radial_density(gray_img, num_rings=5):
         cv2.circle(mask, center, r2, 255, -1)
         cv2.circle(mask, center, r1, 0, -1)
         ring = cv2.bitwise_and(edges, edges, mask=mask)
-        density = np.count_nonzero(ring) / np.count_nonzero(mask)
+        denominator = np.count_nonzero(mask)
+        density = np.count_nonzero(ring) / denominator if denominator != 0 else 0
         results.append(round(density, 4))
     return results
 
@@ -45,18 +46,29 @@ def interpret_texture(gray_img):
     else:
         return "📍 지문의 결은 단순하고 균일하며, 감정을 일정하게 유지하려는 성향이 엿보입니다."
 
-def summarize_fingerprint(gray_img):
-    edges = cv2.Canny(gray_img, 100, 200)
-    densities = radial_density(gray_img)
-    direction = curve_direction_label(edges)
-    density_text = interpret_densities(densities)
-    texture_text = interpret_texture(gray_img)
+def summarize_fingerprint(img):
+    if img is None:
+        return "❌ 이미지가 비어있습니다.", []
 
-    summary = (
-        f"[손끝 분석]\n"
-        f"곡선 흐름: {direction}\n"
-        f"{density_text}\n\n"
-        f"{texture_text}"
-    )
-    return summary, densities
+    # Convert to grayscale if needed
+    if len(img.shape) == 3:
+        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    else:
+        gray_img = img
 
+    try:
+        edges = cv2.Canny(gray_img, 100, 200)
+        densities = radial_density(gray_img)
+        direction = curve_direction_label(edges)
+        density_text = interpret_densities(densities)
+        texture_text = interpret_texture(gray_img)
+
+        summary = (
+            f"[손끝 분석]\n"
+            f"곡선 흐름: {direction}\n"
+            f"{density_text}\n\n"
+            f"{texture_text}"
+        )
+        return summary, densities
+    except Exception as e:
+        return f"❌ 분석 중 오류 발생: {str(e)}", []
