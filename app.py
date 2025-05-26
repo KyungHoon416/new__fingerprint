@@ -37,10 +37,10 @@ def analyze():
 
         message = f"이름: {name}\n전화번호: {phone}\n\n{result}"
 
-        # Optional: Send to Telegram here if needed
-        # from utils.telegram_bot import send_telegram
-        message = f"이름: {name}\\n전화번호: {phone}\\n\\n{result}"
-        send_telegram(message, img_path)
+        try:
+            send_telegram(message, img_path)
+        except Exception as e:
+            print("❌ 텔레그램 전송 중 예외:", str(e))
 
         return jsonify({"result": result})
 
