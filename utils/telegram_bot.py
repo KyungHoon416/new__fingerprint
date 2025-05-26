@@ -2,34 +2,40 @@ import os
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()  # .env 파일에서 환경변수 로드
+load_dotenv()
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-import requests
+def send_telegram_image_and_full_result(image_path, name, phone, thumb_analysis, index_analysis, image_url):
+    # 1. 이미지 전송
+    url_photo = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
+    with open(image_path, "rb") as photo:
+        files = {"photo": photo}
+        data = {
+            "chat_id": CHAT_ID,
+            "caption": f"🌳 [나의 나무 NFT 도착]\n이름: {name}\n전화번호: {phone}"
+        }
+        requests.post(url_photo, files=files, data=data)
 
-def send_telegram_result(name, phone, summary_text, image_url):
+    # 2. 분석 결과 전송 (엄지 + 검지 전체 텍스트)
+    url_msg = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    message = f"""📬 *지문 기반 심층 분석 결과*
 
-    message = f"""📬 *분석 결과 도착!*
+👤 이름: {name}  
+📱 전화번호: {phone}  
 
-👤 이름: {name}
-📱 전화번호: {phone}
+🧠 *엄지 분석 (자기 내면, 감정 기반)*  
+{thumb_analysis}
 
-💬 *요약 분석 결과:*
-{summary_text}
+🤲 *검지 분석 (대인 관계, 행동 경향)*  
+{index_analysis}
 
-🔗 이미지 보기: [여기]({image_url})
+🖼 *NFT 이미지 보기:* [이미지 링크]({image_url})
 """
-
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
-        'chat_id': CHAT_ID,
-        'text': message,
-        'parse_mode': 'Markdown'
+        "chat_id": CHAT_ID,
+        "text": message,
+        "parse_mode": "Markdown"
     }
-
-    response = requests.post(url, data=payload)
-    print("Telegram 응답:", response.status_code, response.text)
-
-
+    requests.post(url_msg, data=payload)

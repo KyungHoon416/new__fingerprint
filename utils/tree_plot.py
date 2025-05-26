@@ -31,6 +31,7 @@ def draw_tree_rings_combined(left_density, right_density, filename="tree.png"):
     plt.close()
 
     # Render에서 공개되는 정적 파일 경로로 URL 반환
-    return f"https://fingerprint-jbdj.onrender.com/static/images/{filename}"
+    return f"https://fingerprint-jbdj.onrender.com/static/nft_trees/{filename}"
+
 
 
