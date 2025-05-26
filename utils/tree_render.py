@@ -23,15 +23,20 @@ def fingerprint_to_tree_lines(img_pil):
 
 
 def visualize_tree_black_lines_on_white_final(skeleton):
-    fig, ax = plt.subplots(figsize=(6, 6))
+    """
+    skeleton: [(x1_list, y1_list), (x2_list, y2_list), ...] 형태의 리스트
+    각 튜플은 하나의 선(곡선)을 의미합니다.
+    """
+    fig, ax = plt.subplots(figsize=(5, 5))
     ax.set_facecolor("white")
     ax.axis("off")
-    
+
     for x, y in skeleton:
-        ax.plot(x, y, color="black", linewidth=0.8)
-    
+        ax.plot(x, y, color="black", linewidth=1.2)
+
     buf = io.BytesIO()
-    plt.savefig(buf, format="png", bbox_inches='tight', transparent=False)
+    plt.savefig(buf, format="png", dpi=150, bbox_inches='tight')
     buf.seek(0)
-    plt.close()
+    plt.close(fig)
+
     return buf
