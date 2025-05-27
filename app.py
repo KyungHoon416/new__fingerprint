@@ -35,7 +35,7 @@ if "private_key" in json_creds:
 CREDS = ServiceAccountCredentials.from_json_keyfile_dict(json_creds, SCOPE)
 
 GSPREAD_CLIENT = gspread.authorize(CREDS)
-SHEET = GSPREAD_CLIENT.open("Code Lab 지문(응답)").worksheet("설문지 응답 시트1")
+SHEET = GSPREAD_CLIENT.open("Code Lab 지문(응답)").worksheet("Form_Responses1")
 
 @app.route("/analyze/thumb", methods=["POST"])
 def analyze_thumb():
