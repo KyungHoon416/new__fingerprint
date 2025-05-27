@@ -136,32 +136,39 @@ def analyze_tree():
     
     
     
+@app.route("/")
+def search_form():
+    return render_template("search_form.html")
+
+
 
 @app.route("/view_result", methods=["GET"])
 def view_result():
     try:
         name = request.args.get("name")
-        phone = request.args.get("phone")
+        phone_suffix = request.args.get("phone")  # 사용자가 입력한 뒷자리 4글자
 
         records = SHEET.get_all_values()
-        headers = records[0]
         rows = records[1:]
 
         for row in rows:
-            if row[2] == name and row[3] == phone:
+            sheet_name = row[2]  # C열
+            sheet_phone = row[3]  # D열 (예: "010-1111-1111")
+
+            if sheet_name == name and sheet_phone[-4:] == phone_suffix:
                 return render_template("result.html", 
-                name=row[2],
-                phone=row[3],
-                thumb=row[8],
-                index=row[9],
-                tree_desc=row[10]
-            )
+                    name=sheet_name,
+                    phone=sheet_phone,
+                    thumb=row[8] if len(row) > 8 else "없음",
+                    index=row[9] if len(row) > 9 else "없음",
+                    tree_desc=row[10] if len(row) > 10 else "없음"
+                )
 
         return "❌ 일치하는 정보를 찾을 수 없습니다.", 404
 
     except Exception as e:
         return f"❌ 서버 오류: {str(e)}", 500
-    
+
 # @app.route("/view_result_test")
 # def view_result_test():
     
