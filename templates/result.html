@@ -11,51 +11,79 @@
       color: #333;
       line-height: 1.8;
     }
-    .result {
-      max-width: 800px;
+    .result-card {
+      max-width: 900px;
       margin: auto;
-      background: white;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .header {
+      background: #e3f1e5;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #d2e8d6;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #265e37;
+    }
+    .content {
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
     h2 {
-      margin-top: 2rem;
+      margin-top: 2.5rem;
       color: #2d4a22;
+      font-size: 1.3rem;
     }
     p {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
     }
-    .hint {
+    pre {
+      background: #f0f4f1;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    .image-section {
       margin-top: 2rem;
+      text-align: center;
+    }
+    .image-section img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .image-caption {
+      margin-top: 0.8rem;
       font-weight: bold;
+      color: #444;
     }
   </style>
 </head>
 <body>
-  <div class="result">
-    <h1>🌳 나의 지문 심청 분석 결과 🌳</h1>
+  <div class="result-card">
+    <div class="header">
+      <h1>🌳 나의 지문 심청 분석 결과 🌳</h1>
+    </div>
+    <div class="content">
+      <p>👤 이름: {{ name }}</p>
+      <p>📞 연락처 끝 4자리: {{ phone }}</p>
 
-    <p>👤 이름: {{ name }}</p>
-    <p>📞 연락처 끝 4자리: {{ phone }}</p>
+      <h2>👐 엄지 분석</h2>
+      <pre>{{ thumb }}</pre>
 
-    <h2>👐 엄지 분석</h2>
-    <pre>{{ thumb }}</pre>
+      <h2>☝️ 검지 분석</h2>
+      <pre>{{ index }}</pre>
 
-    <h2>☝️ 검지 분석</h2>
-    <pre>{{ index }}</pre>
+      <h2>🌲 당신을 담은 나무</h2>
+      <p>{{ tree_desc }}</p>
 
-    <h2>🌲 당신을 담은 나무</h2>
-    <p>{{ tree_desc }}</p>
-
-    
-    {% if tree_image %}
-    <div class="hint">🖼️ 나무 이미지 힌트</div>
-    <p><img src="{{ tree_image }}" alt="나무 이미지" style="max-width:100%; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2);"></p>
-    {% endif %}
-    <div class="hint">🖼️ 나무 이미지 힌트</div>
-    <p>{{ tree_image }}</p>
-    
+      <h2>🖼️ 나무 이미지 힌트</h2>
+      <p>{{ tree_image }}</p>
+      
+    </div>
   </div>
 </body>
 </html>
