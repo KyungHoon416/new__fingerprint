@@ -2,14 +2,68 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>지문 결과 검색</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌳 지문 결과 검색</title>
+  <style>
+    body {
+      font-family: "Apple SD Gothic Neo", sans-serif;
+      background-color: #f5f7fa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background: white;
+      padding: 2rem 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #2f4f2f;
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #2f6f43;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #245836;
+    }
+  </style>
 </head>
 <body>
-  <h2>🌳 지문 분석 결과 검색</h2>
-  <form action="/view_result" method="get">
-    <label>이름: <input type="text" name="name" required></label><br><br>
-    <label>전화번호 뒷자리 4글자: <input type="text" name="phone" maxlength="4" required></label><br><br>
-    <button type="submit">결과 보기</button>
-  </form>
+  <div class="form-container">
+    <h2>🌳 지문 분석 결과 검색</h2>
+    <form action="/view_result" method="get">
+      <label>이름: <input type="text" name="name" required></label>
+      <label>전화번호 뒷자리 4글자: <input type="text" name="phone" maxlength="4" required></label>
+      <button type="submit">결과 보기</button>
+    </form>
+  </div>
 </body>
 </html>
