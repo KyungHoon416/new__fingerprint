@@ -161,7 +161,7 @@ def view_result():
                     phone=sheet_phone,
                     thumb=row[8] if len(row) > 8 else "없음",
                     index=row[9] if len(row) > 9 else "없음",
-                    tree_desc=row[10] if len(row) > 10 else "없음"
+                    tree_desc=row[10] if len(row) > 10 else "없음",
                     tree_image=row[11] if len(row) > 11 else "없음"
                 )
 
