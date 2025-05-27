@@ -23,7 +23,13 @@ json_creds = json.loads(json_creds_str)
 
 # ✅ Google Sheets 연결 설정
 SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-CREDS = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', SCOPE)
+
+# Render에 등록한 환경변수 값 로드
+json_creds_str = os.getenv("GOOGLE_SHEET_CREDENTIALS")
+json_creds = json.loads(json_creds_str)
+# 환경변수로부터 인증 처리
+CREDS = ServiceAccountCredentials.from_json_keyfile_dict(json_creds, SCOPE)
+
 GSPREAD_CLIENT = gspread.authorize(CREDS)
 SHEET = GSPREAD_CLIENT.open("Code Lab 지문(응답)").worksheet("설문지 응답 시트1")
 
