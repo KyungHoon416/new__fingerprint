@@ -1,3 +1,4 @@
+# utils/fingerprint_features.py
 import cv2
 import numpy as np
 
@@ -14,8 +15,7 @@ def radial_density(gray_img, num_rings=5):
         cv2.circle(mask, center, r2, 255, -1)
         cv2.circle(mask, center, r1, 0, -1)
         ring = cv2.bitwise_and(edges, edges, mask=mask)
-        denominator = np.count_nonzero(mask)
-        density = np.count_nonzero(ring) / denominator if denominator != 0 else 0
+        density = np.count_nonzero(ring) / (np.count_nonzero(mask) + 1e-5)
         results.append(round(density, 4))
     return results
 
@@ -31,7 +31,7 @@ def curve_direction_label(edges):
 
 def interpret_densities(densities):
     if densities[0] > 0.08 and sum(densities[1:]) < 0.15:
-        return "📍 손끝 중심에서 바깥쪽으로 갈수록 선의 농도가 점차 옅어졌습니다.\n이는 깊은 내면의 집중력과 자기 통제력이 강하다는 신호일 수 있습니다."
+        return "📍 손끝 중심에서 바깥쪽으로 갈수록 선의 농도가 점차 옅어졌습니다. 이는 깊은 내면의 집중력과 자기 통제력이 강하다는 신호일 수 있습니다."
     elif sum(densities[:2]) < 0.05:
         return "📍 중심의 선이 흐릿해 감정 표현이 자유롭고 외부 지향적일 수 있습니다."
     else:
@@ -42,33 +42,21 @@ def interpret_texture(gray_img):
     filtered = cv2.filter2D(gray_img, cv2.CV_8UC3, gabor_k)
     std = np.std(filtered)
     if std > 12:
-        return "📍 지문의 결(질감)은 매우 다채롭고 섬세하게 나타났습니다.\n감정의 폭이 넓고, 다양한 상황에 감각적으로 반응할 줄 아는 성향을 보여줍니다."
+        return "📍 지문의 결(질감)은 매우 다채롭고 섬세하게 나타났습니다. 감정의 폭이 넓고, 다양한 상황에 감각적으로 반응할 줄 아는 성향을 보여줍니다."
     else:
         return "📍 지문의 결은 단순하고 균일하며, 감정을 일정하게 유지하려는 성향이 엿보입니다."
 
-def summarize_fingerprint(img):
-    if img is None:
-        return "❌ 이미지가 비어있습니다.", []
+def summarize_fingerprint(gray_img):
+    edges = cv2.Canny(gray_img, 100, 200)
+    densities = radial_density(gray_img)
+    direction = curve_direction_label(edges)
+    density_text = interpret_densities(densities)
+    texture_text = interpret_texture(gray_img)
 
-    # Convert to grayscale if needed
-    if len(img.shape) == 3:
-        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    else:
-        gray_img = img
-
-    try:
-        edges = cv2.Canny(gray_img, 100, 200)
-        densities = radial_density(gray_img)
-        direction = curve_direction_label(edges)
-        density_text = interpret_densities(densities)
-        texture_text = interpret_texture(gray_img)
-
-        summary = (
-            f"[손끝 분석]\n"
-            f"곡선 흐름: {direction}\n"
-            f"{density_text}\n\n"
-            f"{texture_text}"
-        )
-        return summary, densities
-    except Exception as e:
-        return f"❌ 분석 중 오류 발생: {str(e)}", []
+    summary = (
+        f"[손끝 분석]\n"
+        f"곡선 흐름: {direction}\n"
+        f"{density_text}\n\n"
+        f"{texture_text}"
+    )
+    return summary, densities

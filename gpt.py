@@ -51,7 +51,7 @@ client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def call_gpt_mini(prompt):
     res = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "너는 감성 지문 분석가야. 최고고급으로 심층분석해주라"},
             {"role": "user", "content": prompt}
