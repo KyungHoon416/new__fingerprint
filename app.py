@@ -30,7 +30,7 @@ json_creds_str = os.getenv("GOOGLE_SHEET_CREDENTIALS")
 # 역슬래시를 실제 줄바꿈으로 복원
 json_creds_str_fixed = json_creds_str.replace("\\n", "\n")
 
-json_creds = json.loads(json_creds_str)
+json_creds = json.loads(json_creds_str_fixed)
 # 환경변수로부터 인증 처리
 CREDS = ServiceAccountCredentials.from_json_keyfile_dict(json_creds, SCOPE)
 
