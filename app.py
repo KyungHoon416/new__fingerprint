@@ -17,10 +17,6 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# ✅ 환경변수에서 JSON 문자열을 불러오기
-json_creds_str = os.getenv("GOOGLE_SHEET_CREDENTIALS")
-json_creds = json.loads(json_creds_str)
-
 # ✅ Google Sheets 연결 설정
 SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
