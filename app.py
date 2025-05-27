@@ -47,44 +47,34 @@ def analyze_index():
         print(traceback.format_exc())
         return jsonify({"result": f"❌ 서버 오류: {str(e)}"}), 500
 
-@app.route("/analyze/final", methods=["POST"])
-def analyze_final():
+@app.route("/analyze/tree", methods=["POST"])
+def analyze_tree():
     try:
         data = request.get_json()
-        name = data.get("name", "이름 없음")
-        phone = data.get("phone", "번호 없음")
         thumb_result = data.get("thumb_result", "")
         index_result = data.get("index_result", "")
 
         tree_info = select_tree_from_text(thumb_result, index_result)
 
-        full_text = f"""
-🌳 *나의 지문 심청 분석 결과* 🌳
-
-👤 이름: {name}
-📞 연락처: {phone}
-
-👐 *엄지 분석*
-{thumb_result}
-
-☝️ *검지 분석*
-{index_result}
-
+        # 선택적으로 텔레그램으로 간단 메시지만 전송 (원할 경우)
+        message = f"""
 🌲 *당신을 담은 나무: {tree_info['name']}*
 {tree_info['desc']}
 
 🖼️ *나무 이미지 힌트*
 {tree_info['image_hint']}
 """
+        send_telegram_result(message)
 
-        # send_telegram_result(full_text)
-
-        # ✅ 구글시트로 전송
-        send_tree_info_to_sheet(name, phone, tree_info)
-
-        return jsonify({"result": "✅ 분석 및 텔레그램 전송 완료", "tree": tree_info})
+        # 응답에 필요한 최소 정보만 전달
+        return jsonify({
+            "tree_name": tree_info["name"],
+            "tree_desc": tree_info["desc"],
+            "image_hint": tree_info["image_hint"],
+            "result": "✅ 요약 분석 완료"
+        })
 
     except Exception as e:
-        print("❌ 서버 내부 오류 (최종):", str(e))
+        print("❌ 서버 내부 오류 (요약):", str(e))
         print(traceback.format_exc())
         return jsonify({"result": f"❌ 서버 오류: {str(e)}"}), 500
