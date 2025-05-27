@@ -47,13 +47,12 @@ def interpret_texture(gray_img):
     else:
         return "📍 지문의 결은 단순하고 균일하며, 감정을 일정하게 유지하려는 성향이 엿보입니다."
 
-def summarize_fingerprint(base64_str):
+def summarize_fingerprint(gray_img):  # 이미 디코딩된 numpy 이미지가 들어옴
     try:
-        img = decode_image(base64_str)  # ✅ PIL → np.ndarray 변환 완료된 이미지
-        if img is None:
-            raise ValueError("이미지 디코딩 실패 (None 반환됨)")
+        if gray_img is None:
+            raise ValueError("입력된 이미지가 None입니다.")
 
-        edges = cv2.Canny(img, 100, 200)
+        edges = cv2.Canny(gray_img, 100, 200)
         summary = "지문 윤곽 분석 완료"
         return summary, edges
 
