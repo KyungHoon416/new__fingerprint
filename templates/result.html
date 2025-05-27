@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>🌳 나의 지문 심층 분석 결과</title>
+  <title>🌳 나의 지문 심청 분석 결과</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
   <style>
@@ -68,19 +68,28 @@
       margin: 3rem auto 1rem;
     }
     .swiper-slide {
-      text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    .swiper-slide img {
-      width: 100%;
-      max-width: 400px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #2b2b2b;
+      background: #f1f1f1;
+      padding: 1.5rem;
       border-radius: 12px;
+      min-height: 200px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .swiper-pagination-bullet {
       background-color: #2b512f;
+      width: 12px;
+      height: 12px;
+      opacity: 1;
+      transition: transform 0.3s;
+    }
+    .swiper-pagination-bullet-active {
+      transform: scale(1.4);
+      background-color: #88c057;
     }
     .swiper-pagination {
       bottom: 10px !important;
@@ -98,7 +107,7 @@
 <body>
   <div class="result-card">
     <div class="header">
-      <h1>🌳 나의 지문 심층 분석 결과 🌳</h1>
+      <h1>🌳 나의 지문 심청 분석 결과 🌳</h1>
     </div>
     <div class="content">
       <div class="info">
@@ -107,7 +116,7 @@
       </div>
 
       <div class="section">
-        <h2>👐 었지 분석</h2>
+        <h2>👐 얱지 분석</h2>
         <pre>{{ thumb }}</pre>
       </div>
 
@@ -121,7 +130,7 @@
         <p>{{ tree_desc }}</p>
         {% if tree_image %}
         <div class="hint-box">
-          📄 <strong>나무 이미지 힌트</strong><br>
+          📄 <strong>나무 이미지 흯터</strong><br>
           {{ tree_image }}
         </div>
         {% endif %}
@@ -130,10 +139,8 @@
       {% if carousel_images %}
       <div class="swiper mySwiper">
         <div class="swiper-wrapper">
-          {% for img in carousel_images %}
-          <div class="swiper-slide">
-            <img src="{{ img }}" alt="분석 이미지">
-          </div>
+          {% for text in carousel_images %}
+          <div class="swiper-slide">{{ text }}</div>
           {% endfor %}
         </div>
         <div class="swiper-pagination"></div>
@@ -151,10 +158,10 @@
         clickable: true,
         dynamicBullets: true,
       },
-      effect: 'fade',
+      effect: 'slide',
       speed: 600,
       autoplay: {
-        delay: 6000,
+        delay: 3500,
         disableOnInteraction: false,
       },
     });
