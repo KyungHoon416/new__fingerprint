@@ -10,65 +10,68 @@
       font-family: "Apple SD Gothic Neo", sans-serif;
       padding: 1rem;
       margin: 0;
-      background: #f5f7fa;
+      background: #f9f9f9;
       color: #333;
       line-height: 1.8;
     }
     .result-card {
-      max-width: 960px;
+      max-width: 860px;
       margin: auto;
-      background: #ffffff;
+      background: #fff;
       border-radius: 16px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       overflow: hidden;
     }
     .header {
-      background: #e3f1e5;
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid #d2e8d6;
+      background: #ecf7ee;
+      padding: 2rem;
+      text-align: center;
     }
     .header h1 {
+      font-size: 2rem;
       margin: 0;
-      font-size: 1.8rem;
-      color: #265e37;
-      text-align: center;
+      color: #2b512f;
     }
     .content {
       padding: 2rem;
     }
-    h2 {
-      margin-top: 2rem;
-      color: #2d4a22;
-      font-size: 1.3rem;
+    .info {
+      margin-bottom: 2rem;
+      font-size: 1rem;
     }
-    p {
+    .section {
+      margin-top: 2.5rem;
+    }
+    .section h2 {
+      font-size: 1.4rem;
+      color: #1f3e25;
       margin-bottom: 1rem;
     }
     pre {
-      background: #f0f4f1;
-      padding: 1rem;
-      border-radius: 8px;
-      overflow-x: auto;
+      background: #f1f5f3;
+      padding: 1.2rem;
+      border-radius: 10px;
       white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 1rem;
     }
-    .image-section {
-      margin-top: 2rem;
-      text-align: center;
-    }
-    .image-caption {
-      margin-top: 0.8rem;
-      font-weight: bold;
-      color: #444;
+    .hint-box {
+      background: #fdf7e6;
+      padding: 1rem;
+      border-left: 6px solid #ffcc00;
+      border-radius: 8px;
+      margin-top: 1rem;
     }
     .swiper {
       width: 100%;
       max-width: 800px;
-      margin: 2rem auto;
+      margin: 3rem auto 1rem;
     }
     .swiper-slide {
       text-align: center;
       display: flex;
       justify-content: center;
+      align-items: center;
     }
     .swiper-slide img {
       width: 100%;
@@ -77,14 +80,17 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .swiper-pagination-bullet {
-      background-color: #265e37;
+      background-color: #2b512f;
+    }
+    .swiper-pagination {
+      bottom: 10px !important;
     }
     @media (max-width: 768px) {
       .content {
         padding: 1rem;
       }
       .header h1 {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
       }
     }
   </style>
@@ -95,24 +101,31 @@
       <h1>🌳 나의 지문 심층 분석 결과 🌳</h1>
     </div>
     <div class="content">
-      <p>👤 이름: {{ name }}</p>
-      <p>📞 연락처 끝 4자리: {{ phone }}</p>
-
-      <h2>👌 었지 분석</h2>
-      <pre>{{ thumb }}</pre>
-
-      <h2>☝️ 가지 분석</h2>
-      <pre>{{ index }}</pre>
-
-      <h2>🌲 당신을 담은 나무</h2>
-      <p>{{ tree_desc }}</p>
-
-      {% if tree_image %}
-      <div class="image-section">
-        <div class="image-caption">🌍 나무 이미지 희폴</div>
-        <p>{{ tree_image }}</p>
+      <div class="info">
+        <p>👤 <strong>이름:</strong> {{ name }}</p>
+        <p>📞 <strong>연락처 끝 4자리:</strong> {{ phone }}</p>
       </div>
-      {% endif %}
+
+      <div class="section">
+        <h2>👐 었지 분석</h2>
+        <pre>{{ thumb }}</pre>
+      </div>
+
+      <div class="section">
+        <h2>☝️ 감지 분석</h2>
+        <pre>{{ index }}</pre>
+      </div>
+
+      <div class="section">
+        <h2>🌲 당신을 담은 나무</h2>
+        <p>{{ tree_desc }}</p>
+        {% if tree_image %}
+        <div class="hint-box">
+          📄 <strong>나무 이미지 힌트</strong><br>
+          {{ tree_image }}
+        </div>
+        {% endif %}
+      </div>
 
       {% if carousel_images %}
       <div class="swiper mySwiper">
@@ -136,9 +149,14 @@
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
+        dynamicBullets: true,
       },
-      effect: 'slide',
+      effect: 'fade',
       speed: 600,
+      autoplay: {
+        delay: 6000,
+        disableOnInteraction: false,
+      },
     });
   </script>
 </body>
