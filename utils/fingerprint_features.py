@@ -46,17 +46,23 @@ def interpret_texture(gray_img):
     else:
         return "📍 지문의 결은 단순하고 균일하며, 감정을 일정하게 유지하려는 성향이 엿보입니다."
 
-def summarize_fingerprint(gray_img):
-    edges = cv2.Canny(gray_img, 100, 200)
-    densities = radial_density(gray_img)
-    direction = curve_direction_label(edges)
-    density_text = interpret_densities(densities)
-    texture_text = interpret_texture(gray_img)
+def summarize_fingerprint(base64_str):
+    try:
+        # Base64 → bytes → numpy array
+        img_data = base64.b64decode(base64_str)
+        np_arr = np.frombuffer(img_data, np.uint8)
+        img = cv2.imdecode(np_arr, cv2.IMREAD_GRAYSCALE)
 
-    summary = (
-        f"[손끝 분석]\n"
-        f"곡선 흐름: {direction}\n"
-        f"{density_text}\n\n"
-        f"{texture_text}"
-    )
-    return summary, densities
+        if img is None:
+            raise ValueError("디코딩된 이미지가 None입니다.")
+
+        # OpenCV 처리
+        edges = cv2.Canny(img, 100, 200)
+
+        # (예시) 출력 요약
+        summary = "지문 윤곽 분석 완료"
+        return summary, edges
+
+    except Exception as e:
+        print(f"❌ 이미지 처리 중 오류: {e}")
+        raise e
