@@ -4,6 +4,7 @@ from utils.fingerprint_features import summarize_fingerprint
 from gpt import build_prompt, call_gpt_mini
 from utils.telegram_bot import send_telegram_result
 from utils.select_tree_from_text import select_tree_from_text
+from utils.send_to_sheet import send_tree_info_to_sheet  # ✅ 구글 시트 연동 함수 추가
 import traceback
 
 app = Flask(__name__)
@@ -14,8 +15,8 @@ def analyze_thumb():
         data = request.get_json()
         base64_str = data.get("image")
 
-        gray_img = decode_image(base64_str)  # 여기서 디코딩해서 np.ndarray로 만듦
-        summary, _ = summarize_fingerprint(gray_img)  # 그대로 넘김
+        gray_img = decode_image(base64_str)
+        summary, _ = summarize_fingerprint(gray_img)
 
         prompt = build_prompt(summary, "")
         result = call_gpt_mini(prompt)
@@ -33,8 +34,8 @@ def analyze_index():
         data = request.get_json()
         base64_str = data.get("image")
 
-        gray_img = decode_image(base64_str)  # 여기서 디코딩해서 np.ndarray로 만듦
-        summary, _ = summarize_fingerprint(gray_img)  # 그대로 넘김
+        gray_img = decode_image(base64_str)
+        summary, _ = summarize_fingerprint(gray_img)
 
         prompt = build_prompt("", summary)
         result = call_gpt_mini(prompt)
@@ -58,25 +59,28 @@ def analyze_final():
         tree_info = select_tree_from_text(thumb_result, index_result)
 
         full_text = f"""
-🌳 *나의 지문 심층 분석 결과* 🌳
+🌳 *나의 지문 심청 분석 결과* 🌳
 
 👤 이름: {name}
 📞 연락처: {phone}
 
-🖐️ *엄지 분석*
+👐 *엄지 분석*
 {thumb_result}
 
 ☝️ *검지 분석*
 {index_result}
 
-🌲 *당신을 닮은 나무: {tree_info['name']}*
+🌲 *당신을 담은 나무: {tree_info['name']}*
 {tree_info['desc']}
 
 🖼️ *나무 이미지 힌트*
 {tree_info['image_hint']}
 """
 
-        send_telegram_result(full_text)
+        # send_telegram_result(full_text)
+
+        # ✅ 구글시트로 전송
+        send_tree_info_to_sheet(name, phone, tree_info)
 
         return jsonify({"result": "✅ 분석 및 텔레그램 전송 완료", "tree": tree_info})
 
