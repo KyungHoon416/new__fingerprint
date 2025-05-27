@@ -6,8 +6,26 @@ from utils.telegram_bot import send_telegram_result
 from utils.select_tree_from_text import select_tree_from_text
 from utils.send_to_sheet import send_tree_info_to_sheet  # ✅ 구글 시트 연동 함수 추가
 import traceback
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from dotenv import load_dotenv
+import os
+import json
+
+# ✅ .env 파일 로딩
+load_dotenv()
 
 app = Flask(__name__)
+
+# ✅ 환경변수에서 JSON 문자열을 불러오기
+json_creds_str = os.getenv("GOOGLE_SHEET_CREDENTIALS")
+json_creds = json.loads(json_creds_str)
+
+# ✅ Google Sheets 연결 설정
+SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+CREDS = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', SCOPE)
+GSPREAD_CLIENT = gspread.authorize(CREDS)
+SHEET = GSPREAD_CLIENT.open("Code Lab 지문(응답)").worksheet("설문지 응답 시트1")
 
 @app.route("/analyze/thumb", methods=["POST"])
 def analyze_thumb():
@@ -78,3 +96,29 @@ def analyze_tree():
         print("❌ 서버 내부 오류 (요약):", str(e))
         print(traceback.format_exc())
         return jsonify({"result": f"❌ 서버 오류: {str(e)}"}), 500
+
+# ✅ Vercel이 호출할 수 있는 GET 기반 결과 API
+@app.route("/analyze", methods=["GET"])
+def get_analysis_result():
+    try:
+        name = request.args.get("name")
+        phone = request.args.get("phone")
+
+        records = SHEET.get_all_values()
+        headers = records[0]
+        rows = records[1:]
+
+        for row in rows:
+            if row[2] == name and row[3] == phone:
+                return jsonify({
+                    "thumb": row[8],
+                    "index": row[9],
+                    "tree_desc": row[10],
+                    "tree_image": row[11]
+                })
+
+        return jsonify({"error": "❌ 일치하는 정보를 찾을 수 없습니다."}), 404
+
+    except Exception as e:
+        print("❌ 결과 조회 오류:", str(e))
+        return jsonify({"error": f"❌ 서버 오류: {str(e)}"}), 500
