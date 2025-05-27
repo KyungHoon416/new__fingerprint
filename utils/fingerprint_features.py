@@ -1,8 +1,7 @@
 # utils/fingerprint_features.py
 import cv2
 import numpy as np
-import base64
-
+from utils.image_decode import decode_image  # ✅ 여기로부터 가져옴
 
 def radial_density(gray_img, num_rings=5):
     h, w = gray_img.shape
@@ -50,18 +49,11 @@ def interpret_texture(gray_img):
 
 def summarize_fingerprint(base64_str):
     try:
-        # Base64 → bytes → numpy array
-        img_data = base64.b64decode(base64_str)
-        np_arr = np.frombuffer(img_data, np.uint8)
-        img = cv2.imdecode(np_arr, cv2.IMREAD_GRAYSCALE)
-
+        img = decode_image(base64_str)  # ✅ PIL → np.ndarray 변환 완료된 이미지
         if img is None:
-            raise ValueError("디코딩된 이미지가 None입니다.")
+            raise ValueError("이미지 디코딩 실패 (None 반환됨)")
 
-        # OpenCV 처리
         edges = cv2.Canny(img, 100, 200)
-
-        # (예시) 출력 요약
         summary = "지문 윤곽 분석 완료"
         return summary, edges
 
