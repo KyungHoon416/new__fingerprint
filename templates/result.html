@@ -2,17 +2,20 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>🌳 나의 지문 심청 분석 결과</title>
+  <title>🌳 나의 지문 심층 분석 결과</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
   <style>
     body {
       font-family: "Apple SD Gothic Neo", sans-serif;
-      padding: 2rem;
+      padding: 1rem;
+      margin: 0;
       background: #f5f7fa;
       color: #333;
       line-height: 1.8;
     }
     .result-card {
-      max-width: 900px;
+      max-width: 960px;
       margin: auto;
       background: #ffffff;
       border-radius: 16px;
@@ -28,12 +31,13 @@
       margin: 0;
       font-size: 1.8rem;
       color: #265e37;
+      text-align: center;
     }
     .content {
       padding: 2rem;
     }
     h2 {
-      margin-top: 2.5rem;
+      margin-top: 2rem;
       color: #2d4a22;
       font-size: 1.3rem;
     }
@@ -45,45 +49,97 @@
       padding: 1rem;
       border-radius: 8px;
       overflow-x: auto;
+      white-space: pre-wrap;
     }
     .image-section {
       margin-top: 2rem;
       text-align: center;
-    }
-    .image-section img {
-      max-width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .image-caption {
       margin-top: 0.8rem;
       font-weight: bold;
       color: #444;
     }
+    .swiper {
+      width: 100%;
+      max-width: 800px;
+      margin: 2rem auto;
+    }
+    .swiper-slide {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+    .swiper-slide img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .swiper-pagination-bullet {
+      background-color: #265e37;
+    }
+    @media (max-width: 768px) {
+      .content {
+        padding: 1rem;
+      }
+      .header h1 {
+        font-size: 1.4rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="result-card">
     <div class="header">
-      <h1>🌳 나의 지문 심청 분석 결과 🌳</h1>
+      <h1>🌳 나의 지문 심층 분석 결과 🌳</h1>
     </div>
     <div class="content">
       <p>👤 이름: {{ name }}</p>
       <p>📞 연락처 끝 4자리: {{ phone }}</p>
 
-      <h2>👐 엄지 분석</h2>
+      <h2>👌 었지 분석</h2>
       <pre>{{ thumb }}</pre>
 
-      <h2>☝️ 검지 분석</h2>
+      <h2>☝️ 가지 분석</h2>
       <pre>{{ index }}</pre>
 
       <h2>🌲 당신을 담은 나무</h2>
       <p>{{ tree_desc }}</p>
 
-      <h2>🖼️ 나무 이미지 힌트</h2>
-      <p>{{ tree_image }}</p>
-      
+      {% if tree_image %}
+      <div class="image-section">
+        <div class="image-caption">🌍 나무 이미지 희폴</div>
+        <p>{{ tree_image }}</p>
+      </div>
+      {% endif %}
+
+      {% if carousel_images %}
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          {% for img in carousel_images %}
+          <div class="swiper-slide">
+            <img src="{{ img }}" alt="분석 이미지">
+          </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+      {% endif %}
+
     </div>
   </div>
+  <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper(".mySwiper", {
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      effect: 'slide',
+      speed: 600,
+    });
+  </script>
 </body>
 </html>
