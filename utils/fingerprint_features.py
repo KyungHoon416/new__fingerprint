@@ -1,6 +1,8 @@
 # utils/fingerprint_features.py
 import cv2
 import numpy as np
+import base64
+
 
 def radial_density(gray_img, num_rings=5):
     h, w = gray_img.shape
