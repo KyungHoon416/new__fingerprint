@@ -12,15 +12,13 @@ app = Flask(__name__)
 def analyze_thumb():
     try:
         data = request.get_json()
-        image = data.get("image")
-        name = data.get("name", "이름 없음")
-        phone = data.get("phone", "번호 없음")
+        base64_str = data.get("image")  # ✅ 문자열로 들어와야 함
 
-        if not image:
-            return jsonify({"result": "❌ 엄지 이미지 누락됨"}), 400
+        # if not image:
+        #     return jsonify({"result": "❌ 엄지 이미지 누락됨"}), 400
 
-        img = decode_image(image)
-        summary, _ = summarize_fingerprint(img)
+        # img = decode_image(image)
+        summary, _ = summarize_fingerprint(base64_str)
         prompt = build_prompt(summary, "")
         result = call_gpt_mini(prompt)
 
@@ -35,15 +33,10 @@ def analyze_thumb():
 def analyze_index():
     try:
         data = request.get_json()
-        image = data.get("image")
-        name = data.get("name", "이름 없음")
-        phone = data.get("phone", "번호 없음")
+        base64_str = data.get("image") 
 
-        if not image:
-            return jsonify({"result": "❌ 검지 이미지 누락됨"}), 400
-
-        img = decode_image(image)
-        summary, _ = summarize_fingerprint(img)
+        # img = decode_image(image)
+        summary, _ = summarize_fingerprint(base64_str)
         prompt = build_prompt("", summary)
         result = call_gpt_mini(prompt)
 
