@@ -2,50 +2,60 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>나의 지문 심층 분석 결과</title>
+  <title>🌳 나의 지문 심청 분석 결과</title>
   <style>
     body {
-      font-family: 'Apple SD Gothic Neo', sans-serif;
+      font-family: "Apple SD Gothic Neo", sans-serif;
       padding: 2rem;
-      background: #f9f9f9;
+      background: #f5f7fa;
       color: #333;
-      line-height: 1.7;
+      line-height: 1.8;
     }
-    .container {
+    .result {
       max-width: 800px;
       margin: auto;
-      background: #fff;
-      border-radius: 10px;
+      background: white;
       padding: 2rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
     h2 {
-      color: #2d8659;
-    }
-    h3 {
       margin-top: 2rem;
+      color: #2d4a22;
     }
-    .tag {
-      margin-top: 1rem;
-      font-size: 0.95rem;
-      color: #666;
+    p {
+      margin-bottom: 1.2rem;
+    }
+    .hint {
+      margin-top: 2rem;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🌳 나의 지문 심층 분석 결과 🌳</h2>
+  <div class="result">
+    <h1>🌳 나의 지문 심청 분석 결과 🌳</h1>
+
     <p>👤 이름: {{ name }}</p>
+    <p>📞 연락처 끝 4자리: {{ phone }}</p>
 
-    <h3>👐 엄지 분석</h3>
-    <p>{{ thumb }}</p>
+    <h2>👐 엄지 분석</h2>
+    <pre>{{ thumb }}</pre>
 
-    <h3>☝️ 검지 분석</h3>
-    <p>{{ index }}</p>
+    <h2>☝️ 검지 분석</h2>
+    <pre>{{ index }}</pre>
 
-    <h3>🌲 당신을 담은 나무: {{ tree_name }}</h3>
+    <h2>🌲 당신을 담은 나무</h2>
     <p>{{ tree_desc }}</p>
-    <p><strong>🖼️ 나무 이미지 힌트</strong><br>{{ tree_image }}</p>
+
+    
+    {% if tree_image %}
+    <div class="hint">🖼️ 나무 이미지 힌트</div>
+    <p><img src="{{ tree_image }}" alt="나무 이미지" style="max-width:100%; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2);"></p>
+    {% endif %}
+    <div class="hint">🖼️ 나무 이미지 힌트</div>
+    <p>{{ tree_image }}</p>
+    
   </div>
 </body>
 </html>
