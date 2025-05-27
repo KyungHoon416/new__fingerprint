@@ -17,17 +17,21 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# ✅ Google Sheets 연결 설정
 SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
-# Render에 등록한 환경변수 값 로드
+# 환경변수에서 JSON 문자열 가져오기
 json_creds_str = os.getenv("GOOGLE_SHEET_CREDENTIALS")
 
-# 역슬래시를 실제 줄바꿈으로 복원
-json_creds_str_fixed = json_creds_str.replace("\\n", "\n")
+if not json_creds_str:
+    raise ValueError("환경변수 GOOGLE_SHEET_CREDENTIALS가 누락됨")
 
-json_creds = json.loads(json_creds_str_fixed)
-# 환경변수로부터 인증 처리
+# 문자열 → JSON으로 파싱
+json_creds = json.loads(json_creds_str)
+
+# private_key의 줄바꿈 복원
+if "private_key" in json_creds:
+    json_creds["private_key"] = json_creds["private_key"].replace("\\n", "\n")
+
 CREDS = ServiceAccountCredentials.from_json_keyfile_dict(json_creds, SCOPE)
 
 GSPREAD_CLIENT = gspread.authorize(CREDS)
