@@ -11,6 +11,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from dotenv import load_dotenv
 import os
 import json
+from flask import render_template
 
 # ✅ .env 파일 로딩
 load_dotenv()
@@ -132,3 +133,29 @@ def get_analysis_result():
     except Exception as e:
         print("❌ 결과 조회 오류:", str(e))
         return jsonify({"error": f"❌ 서버 오류: {str(e)}"}), 500
+    
+    
+    
+
+@app.route("/view_result", methods=["GET"])
+def view_result():
+    try:
+        name = request.args.get("name")
+        phone = request.args.get("phone")
+
+        records = SHEET.get_all_values()
+        headers = records[0]
+        rows = records[1:]
+
+        for row in rows:
+            if row[2] == name and row[3] == phone:
+                return render_template("result.html", 
+                    tree_name=row[10],
+                    tree_desc=row[11],
+                    tree_image=row[12]
+                )
+
+        return "❌ 일치하는 정보를 찾을 수 없습니다.", 404
+
+    except Exception as e:
+        return f"❌ 서버 오류: {str(e)}", 500

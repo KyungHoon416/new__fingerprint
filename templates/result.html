@@ -1,0 +1,47 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지문 분석 결과</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f5f7fa;
+      padding: 2rem;
+      color: #333;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 2rem;
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    .tree-name {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .desc {
+      margin: 1rem 0;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="tree-name">🌳 당신을 닮은 나무: {{ tree_name }}</div>
+    <div class="desc">{{ tree_desc }}</div>
+    <img src="{{ tree_image }}" alt="나무 이미지 힌트">
+  </div>
+</body>
+</html>
