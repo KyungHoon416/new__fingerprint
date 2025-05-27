@@ -108,31 +108,31 @@ def analyze_tree():
         print(traceback.format_exc())
         return jsonify({"result": f"❌ 서버 오류: {str(e)}"}), 500
 
-# ✅ Vercel이 호출할 수 있는 GET 기반 결과 API
-@app.route("/analyze", methods=["GET"])
-def get_analysis_result():
-    try:
-        name = request.args.get("name")
-        phone = request.args.get("phone")
+# # ✅ Vercel이 호출할 수 있는 GET 기반 결과 API
+# @app.route("/analyze", methods=["GET"])
+# def get_analysis_result():
+#     try:
+#         name = request.args.get("name")
+#         phone = request.args.get("phone")
 
-        records = SHEET.get_all_values()
-        headers = records[0]
-        rows = records[1:]
+#         records = SHEET.get_all_values()
+#         headers = records[0]
+#         rows = records[1:]
 
-        for row in rows:
-            if row[2] == name and row[3] == phone:
-                return jsonify({
-                    "thumb": row[8],
-                    "index": row[9],
-                    "tree_desc": row[10],
-                    "tree_image": row[11]
-                })
+#         for row in rows:
+#             if row[2] == name and row[3] == phone:
+#                 return jsonify({
+#                     "thumb": row[8],
+#                     "index": row[9],
+#                     "tree_desc": row[10],
+#                     "tree_image": row[11]
+#                 })
 
-        return jsonify({"error": "❌ 일치하는 정보를 찾을 수 없습니다."}), 404
+#         return jsonify({"error": "❌ 일치하는 정보를 찾을 수 없습니다."}), 404
 
-    except Exception as e:
-        print("❌ 결과 조회 오류:", str(e))
-        return jsonify({"error": f"❌ 서버 오류: {str(e)}"}), 500
+#     except Exception as e:
+#         print("❌ 결과 조회 오류:", str(e))
+#         return jsonify({"error": f"❌ 서버 오류: {str(e)}"}), 500
     
     
     
@@ -150,12 +150,30 @@ def view_result():
         for row in rows:
             if row[2] == name and row[3] == phone:
                 return render_template("result.html", 
-                    tree_name=row[10],
-                    tree_desc=row[11],
-                    tree_image=row[12]
-                )
+                name=row[2],
+                phone=row[3],
+                thumb=row[8],
+                index=row[9],
+                tree_desc=row[10]
+            )
 
         return "❌ 일치하는 정보를 찾을 수 없습니다.", 404
 
     except Exception as e:
         return f"❌ 서버 오류: {str(e)}", 500
+    
+# @app.route("/view_result_test")
+# def view_result_test():
+    
+#     return render_template("result.html", 
+#     name="김경훈",
+#     phone="010-1111-1111",
+#     thumb="엄지 분석 결과 전체 텍스트",
+#     index="검지 분석 결과 전체 텍스트",
+#     tree_name="느티나무",
+#     tree_desc="감정을 잘 조절하고 내면의 중심이 단단한 사람입니다.",
+#     tree_image="넓게 퍼진 가지와 깊은 뿌리, 안정된 중심 구조"
+# )
+    
+if __name__ == "__main__":
+    app.run(debug=True)

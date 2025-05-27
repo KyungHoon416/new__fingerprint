@@ -1,47 +1,52 @@
-<!-- templates/result.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>지문 분석 결과</title>
+  <title>나의 지문 심층 분석 결과</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background: #f5f7fa;
+      font-family: 'Apple SD Gothic Neo', sans-serif;
       padding: 2rem;
+      background: #f9f9f9;
       color: #333;
-      text-align: center;
+      line-height: 1.7;
     }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      border-radius: 10px;
       padding: 2rem;
-      max-width: 600px;
-      margin: 2rem auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-    img {
-      max-width: 100%;
-      border-radius: 8px;
+    h2 {
+      color: #2d8659;
+    }
+    h3 {
+      margin-top: 2rem;
+    }
+    .tag {
       margin-top: 1rem;
-    }
-    .tree-name {
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
-    .desc {
-      margin: 1rem 0;
-      white-space: pre-wrap;
+      font-size: 0.95rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="tree-name">🌳 당신을 닮은 나무: {{ tree_name }}</div>
-    <div class="desc">{{ tree_desc }}</div>
-    <img src="{{ tree_image }}" alt="나무 이미지 힌트">
+  <div class="container">
+    <h2>🌳 나의 지문 심층 분석 결과 🌳</h2>
+    <p>👤 이름: {{ name }}</p>
+    <p>📞 연락처: {{ phone }}</p>
+
+    <h3>👐 엄지 분석</h3>
+    <p>{{ thumb }}</p>
+
+    <h3>☝️ 검지 분석</h3>
+    <p>{{ index }}</p>
+
+    <h3>🌲 당신을 담은 나무: {{ tree_name }}</h3>
+    <p>{{ tree_desc }}</p>
+    <p><strong>🖼️ 나무 이미지 힌트</strong><br>{{ tree_image }}</p>
   </div>
 </body>
 </html>
