@@ -1,5 +1,7 @@
 import os
 import requests
+from dotenv import load_dotenv
+load_dotenv()
 
 def send_telegram_result(text):
     BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
