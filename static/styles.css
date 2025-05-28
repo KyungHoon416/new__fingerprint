@@ -37,24 +37,39 @@ body {
 
 .swiper-slide {
   display: flex;
-  justify-content: center;
+  justify-content: center;    /* ⬅️ 카드가 중앙 정렬되도록 */
   align-items: center;
-  background: #f0f9f4;
   padding: 2rem;
+  box-sizing: border-box;     /* ⬅️ padding 포함 계산 */
+  overflow-x: hidden;         /* ⬅️ 좌우 넘침 방지 */
 }
 
+.scroll-prompt {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  font-size: 0.85rem;
+  color: #999;
+  transition: opacity 0.3s ease;
+}
+
+
 .page {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
   max-width: 700px;
   width: 100%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin: auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);  /* ⬅️ 전시 느낌 강조 */
   animation: fadeIn 0.6s ease-in-out;
-  max-height: calc(100vh - 200px);
+
+  max-height: calc(100vh - 180px);
   overflow-y: auto;
+
   position: relative;
 }
+
 
 .page::after {
   content: "→ 다음으로 넘기세요";

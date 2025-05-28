@@ -11,7 +11,7 @@
       margin: 0;
       background: #f5f7fa;
       color: #333;
-      overflow-x: hidden; /* 좌우 스크롤 방지 */
+      overflow-x: hidden;
     }
 
     .fixed-header {
@@ -84,13 +84,13 @@
       position: relative;
     }
 
-    .page::after {
-      content: "→ 다음으로 넘기세요";
+    .scroll-prompt {
       position: absolute;
       bottom: 10px;
       right: 20px;
       font-size: 0.85rem;
       color: #999;
+      transition: opacity 0.3s ease;
     }
 
     .page::before {
@@ -178,6 +178,25 @@
         el: ".swiper-pagination",
         clickable: true,
       },
+    });
+
+    const pages = document.querySelectorAll('.page');
+    pages.forEach((page) => {
+      const prompt = document.createElement('div');
+      prompt.classList.add('scroll-prompt');
+      prompt.innerText = '→ 다음으로 넘기세요';
+      page.appendChild(prompt);
+
+      page.addEventListener('scroll', () => {
+        const scrollable = page.scrollHeight - page.clientHeight;
+        const scrolled = page.scrollTop;
+
+        if (scrolled >= scrollable - 10) {
+          prompt.innerText = '✨ 감정을 다 읽으셨군요. 감사합니다!';
+        } else {
+          prompt.innerText = '→ 다음으로 넘기세요';
+        }
+      });
     });
   </script>
 </body>
