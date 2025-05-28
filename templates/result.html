@@ -2,21 +2,74 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>🌳 나의 지문 심층 분석 결과</title>
+  <title>🌳 나의 지문 심청 분석 결과</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
+<link rel="stylesheet" href="/static/styles.css">
+
   <style>
+    body {
+      font-family: "Apple SD Gothic Neo", sans-serif;
+      margin: 0;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #e9f5ee;
+      padding: 1rem;
+      text-align: center;
+      z-index: 999;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .fixed-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #2d4a22;
+    }
+
+    .fixed-header p {
+      margin: 0.3rem 0;
+      font-size: 1rem;
+      color: #333;
+    }
+
     .swiper {
       width: 100%;
       height: 100vh;
+      padding-top: 120px;
     }
 
     .swiper-slide {
+      padding: 2rem;
+      background: #e7f2ec;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #f0f9f4;
-      padding: 2rem;
+    }
+
+    .swiper-slide h3 {
+      font-size: 1.5rem;
+      color: #264d3d;
+      margin-bottom: 1rem;
+    }
+
+    .swiper-slide p {
+      white-space: pre-line;
+      line-height: 1.8;
+    }
+
+    .swiper-pagination {
+      text-align: center;
+      margin-top: 1.5rem;
     }
 
     .page {
@@ -27,6 +80,29 @@
       width: 100%;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       animation: fadeIn 0.6s ease-in-out;
+      max-height: calc(100vh - 180px);
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .page::after {
+      content: "→ 다음으로 넘기세요";
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background: linear-gradient(to bottom, transparent, white);
+      pointer-events: none;
     }
 
     .analysis-content pre, .analysis-content p {
@@ -36,7 +112,7 @@
       color: #333;
     }
 
-    h2, h3 {
+    h3 {
       color: #2d4a22;
       text-align: center;
       margin-bottom: 1rem;
@@ -55,16 +131,14 @@
   </style>
 </head>
 <body>
+  <div class="fixed-header">
+    <h2>🌳 나의 지문 심청 분석 결과</h2>
+    <p>👤 이름: {{ name }}</p>
+    <p>📞 끝 4자리: {{ phone }}</p>
+  </div>
+
   <div class="swiper mySwiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <div class="page">
-          <h2>🌳 나의 지문 심층 분석 결과</h2>
-          <p>👤 이름: {{ name }}</p>
-          <p>📞 끝 4자리: {{ phone }}</p>
-        </div>
-      </div>
-
       <div class="swiper-slide">
         <div class="page">
           <h3>🙌 엄지 분석</h3>
