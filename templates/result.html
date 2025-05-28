@@ -1,60 +1,42 @@
-<!-- result.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>🌳 나의 지문 심층 분석 결과</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
   <div class="result-card">
     <div class="header">
       <h1>🌳 나의 지문 심층 분석 결과 🌳</h1>
+      <p>👤 이름: {{ name }} &nbsp;&nbsp; 📞 끝 4자리: {{ phone }}</p>
     </div>
-    <div class="content">
-      <div class="info">
-        <p>👤 <strong>이름:</strong> {{ name }}</p>
-        <p>📞 <strong>연락처 끝 4자리:</strong> {{ phone }}</p>
-      </div>
 
-      <div class="section">
-        <h2>👐 엄지 분석</h2>
-        <pre>{{ thumb }}</pre>
-      </div>
-
-      <div class="section">
-        <h2>☝️ 검지 분석</h2>
-        <pre>{{ index }}</pre>
-      </div>
-
-      <div class="section">
-        <h2>🌲 당신을 담은 나무</h2>
-        <p>{{ tree_desc }}</p>
-        {% if tree_image %}
-        <div class="hint-box">
-          📄 <strong>나무 이미지 힌트</strong><br>
-          {{ tree_image }}
+    <!-- Swiper 슬라이드 영역 -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <h3>👌 엄지 분석</h3>
+          <p>{{ thumb }}</p>
         </div>
-        {% endif %}
-      </div>
-
-      {% if carousel_texts %}
-      <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
-          {% for text in carousel_texts %}
-          <div class="swiper-slide">
-            <div class="text-slide">{{ text }}</div>
-          </div>
-          {% endfor %}
+        <div class="swiper-slide">
+          <h3>☝️ 검지 분석</h3>
+          <p>{{ index }}</p>
         </div>
-        <div class="swiper-pagination">
-          <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_Cc8Bpg.json"  background="transparent" speed="1" style="width: 50px; height: 50px;" loop autoplay></lottie-player>
+        <div class="swiper-slide">
+          <h3>🌲 나무 해석</h3>
+          <p>{{ tree_desc }}</p>
         </div>
       </div>
-      {% endif %}
-
+      <div class="swiper-pagination">
+        <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_Cc8Bpg.json"
+                       background="transparent"
+                       speed="1"
+                       style="width: 60px; height: 60px;"
+                       loop autoplay></lottie-player>
+      </div>
     </div>
   </div>
 
