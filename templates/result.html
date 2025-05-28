@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>🌳 나의 지문 심층 분석 결과</title>
+  <title>🌳 나의 지문 심청 분석 결과</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
   <style>
@@ -84,15 +84,6 @@
       position: relative;
     }
 
-    .scroll-prompt {
-      position: absolute;
-      bottom: 10px;
-      right: 20px;
-      font-size: 0.85rem;
-      color: #999;
-      transition: opacity 0.3s ease;
-    }
-
     .page::before {
       content: "";
       position: absolute;
@@ -102,6 +93,21 @@
       height: 30px;
       background: linear-gradient(to bottom, transparent, white);
       pointer-events: none;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 0.85rem;
+      color: #999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .scroll-hint.visible {
+      opacity: 1;
     }
 
     .analysis-content pre, .analysis-content p {
@@ -131,7 +137,7 @@
 </head>
 <body>
   <div class="fixed-header">
-    <h2>🌳 나의 지문 심층 분석 결과</h2>
+    <h2>🌳 나의 지문 심청 분석 결과</h2>
     <p>👤 이름: {{ name }}</p>
     <p>📞 끝 4자리: {{ phone }}</p>
   </div>
@@ -140,19 +146,21 @@
     <div class="swiper-wrapper">
       <div class="swiper-slide">
         <div class="page">
-          <h3>🙌 엄지 분석</h3>
+          <h3>👌 언지 분석</h3>
           <div class="analysis-content">
             <pre>{{ thumb }}</pre>
           </div>
+          <div class="scroll-hint">→ 다음으로 넘기세요</div>
         </div>
       </div>
 
       <div class="swiper-slide">
         <div class="page">
-          <h3>☝️ 검지 분석</h3>
+          <h3>☝️ 감지 분석</h3>
           <div class="analysis-content">
             <pre>{{ index }}</pre>
           </div>
+          <div class="scroll-hint">→ 다음으로 넘기세요</div>
         </div>
       </div>
 
@@ -163,6 +171,7 @@
             <p>{{ tree_desc }}</p>
             <p class="tree-hint">📄 나무 이미지 힌트: {{ tree_image }}</p>
           </div>
+          <div class="scroll-hint">→ 다음으로 넘기세요</div>
         </div>
       </div>
     </div>
@@ -180,21 +189,14 @@
       },
     });
 
-    const pages = document.querySelectorAll('.page');
-    pages.forEach((page) => {
-      const prompt = document.createElement('div');
-      prompt.classList.add('scroll-prompt');
-      prompt.innerText = '→ 다음으로 넘기세요';
-      page.appendChild(prompt);
-
-      page.addEventListener('scroll', () => {
-        const scrollable = page.scrollHeight - page.clientHeight;
-        const scrolled = page.scrollTop;
-
-        if (scrolled >= scrollable - 10) {
-          prompt.innerText = '✨ 감정을 다 읽으셨군요. 감사합니다!';
+    document.querySelectorAll(".page").forEach((page) => {
+      const hint = page.querySelector(".scroll-hint");
+      page.addEventListener("scroll", () => {
+        const isScrolledToBottom = Math.abs(page.scrollTop + page.clientHeight - page.scrollHeight) < 5;
+        if (isScrolledToBottom) {
+          hint.classList.add("visible");
         } else {
-          prompt.innerText = '→ 다음으로 넘기세요';
+          hint.classList.remove("visible");
         }
       });
     });

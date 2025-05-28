@@ -53,6 +53,21 @@ body {
   transition: opacity 0.3s ease;
 }
 
+  .scroll-hint {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 0.85rem;
+    color: #999;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .scroll-hint.visible {
+    opacity: 1;
+  }
+
 
 .page {
   max-width: 700px;
