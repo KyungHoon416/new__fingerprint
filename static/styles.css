@@ -1,0 +1,80 @@
+body {
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  padding: 1rem;
+  margin: 0;
+  background: #f9f9f9;
+  color: #333;
+  line-height: 1.8;
+}
+.result-card {
+  max-width: 860px;
+  margin: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+.header {
+  background: #ecf7ee;
+  padding: 2rem;
+  text-align: center;
+}
+.header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #2b512f;
+}
+.content {
+  padding: 2rem;
+}
+.info {
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+.section {
+  margin-top: 2.5rem;
+}
+.section h2 {
+  font-size: 1.4rem;
+  color: #1f3e25;
+  margin-bottom: 1rem;
+}
+pre {
+  background: #f1f5f3;
+  padding: 1.2rem;
+  border-radius: 10px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 1rem;
+}
+.hint-box {
+  background: #fdf7e6;
+  padding: 1rem;
+  border-left: 6px solid #ffcc00;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+.swiper {
+  width: 100%;
+  max-width: 800px;
+  margin: 3rem auto 1rem;
+}
+.swiper-slide {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text-slide {
+  background: #e8f4f1;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-size: 1.1rem;
+}
+.swiper-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+}

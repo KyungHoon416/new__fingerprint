@@ -1,3 +1,4 @@
+<!-- result.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,104 +6,7 @@
   <title>🌳 나의 지문 심층 분석 결과</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
-  <style>
-    body {
-      font-family: "Apple SD Gothic Neo", sans-serif;
-      padding: 1rem;
-      margin: 0;
-      background: #f9f9f9;
-      color: #333;
-      line-height: 1.8;
-    }
-    .result-card {
-      max-width: 860px;
-      margin: auto;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    .header {
-      background: #ecf7ee;
-      padding: 2rem;
-      text-align: center;
-    }
-    .header h1 {
-      font-size: 2rem;
-      margin: 0;
-      color: #2b512f;
-    }
-    .content {
-      padding: 2rem;
-    }
-    .info {
-      margin-bottom: 2rem;
-      font-size: 1rem;
-    }
-    .section {
-      margin-top: 2.5rem;
-    }
-    .section h2 {
-      font-size: 1.4rem;
-      color: #1f3e25;
-      margin-bottom: 1rem;
-    }
-    pre {
-      background: #f1f5f3;
-      padding: 1.2rem;
-      border-radius: 10px;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-size: 1rem;
-    }
-    .hint-box {
-      background: #fdf7e6;
-      padding: 1rem;
-      border-left: 6px solid #ffcc00;
-      border-radius: 8px;
-      margin-top: 1rem;
-    }
-    .swiper {
-      width: 100%;
-      max-width: 800px;
-      margin: 3rem auto 1rem;
-    }
-    .swiper-slide {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #2b2b2b;
-      background: #f1f1f1;
-      padding: 1.5rem;
-      border-radius: 12px;
-      min-height: 200px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .swiper-pagination-bullet {
-      background-color: #2b512f;
-      width: 12px;
-      height: 12px;
-      opacity: 1;
-      transition: transform 0.3s;
-    }
-    .swiper-pagination-bullet-active {
-      transform: scale(1.4);
-      background-color: #88c057;
-    }
-    .swiper-pagination {
-      bottom: 10px !important;
-    }
-    @media (max-width: 768px) {
-      .content {
-        padding: 1rem;
-      }
-      .header h1 {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
   <div class="result-card">
@@ -130,41 +34,32 @@
         <p>{{ tree_desc }}</p>
         {% if tree_image %}
         <div class="hint-box">
-          📄 <strong>나무 이미지 힌트 </strong><br>
+          📄 <strong>나무 이미지 힌트</strong><br>
           {{ tree_image }}
         </div>
         {% endif %}
       </div>
 
-      {% if carousel_images %}
+      {% if carousel_texts %}
       <div class="swiper mySwiper">
         <div class="swiper-wrapper">
-          {% for text in carousel_images %}
-          <div class="swiper-slide">{{ text }}</div>
+          {% for text in carousel_texts %}
+          <div class="swiper-slide">
+            <div class="text-slide">{{ text }}</div>
+          </div>
           {% endfor %}
         </div>
-        <div class="swiper-pagination"></div>
+        <div class="swiper-pagination">
+          <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_Cc8Bpg.json"  background="transparent" speed="1" style="width: 50px; height: 50px;" loop autoplay></lottie-player>
+        </div>
       </div>
       {% endif %}
 
     </div>
   </div>
+
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
-  <script>
-    const swiper = new Swiper(".mySwiper", {
-      loop: true,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-        dynamicBullets: true,
-      },
-      effect: 'slide',
-      speed: 600,
-      autoplay: {
-        delay: 3500,
-        disableOnInteraction: false,
-      },
-    });
-  </script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 </html>
