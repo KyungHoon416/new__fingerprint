@@ -157,13 +157,14 @@ def view_result():
 
             if sheet_name == name and sheet_phone[-4:] == phone_suffix:
                 return render_template("result.html", 
-                    name=sheet_name,
-                    phone=sheet_phone,
-                    thumb=row[8] if len(row) > 8 else "없음",
-                    index=row[9] if len(row) > 9 else "없음",
-                    tree_desc=row[10] if len(row) > 10 else "없음",
-                    tree_image=row[11] if len(row) > 11 else "없음"
-                )
+                name=sheet_name,
+                phone=sheet_phone,
+                thumb=row[9] if len(row) > 9 else "없음",         # ✅ J열
+                index=row[10] if len(row) > 10 else "없음",       # ✅ K열
+                tree_desc=row[11] if len(row) > 11 else "없음",   # ✅ L열
+                tree_image=row[12] if len(row) > 12 else "없음"   # ✅ M열
+            )
+
 
         return "❌ 일치하는 정보를 찾을 수 없습니다.", 404
 
