@@ -99,66 +99,64 @@ def interpret_densities(radial):
         return "감정 밀도 해석이 불가능합니다."
 
 
-def interpret_texture_segmented(gray_img, num_segments=8):
+def interpret_texture_segmented(gray_img, num_bins=8):
     h, w = gray_img.shape
-    segment_w = w // num_segments
-    stds = []
+    bin_h, bin_w = h // num_bins, w // num_bins
 
-    for i in range(num_segments):
-        segment = gray_img[:, i * segment_w:(i + 1) * segment_w]
-        stds.append(np.std(segment))
+    texture_map = []
+    for i in range(num_bins):
+        for j in range(num_bins):
+            patch = gray_img[i * bin_h:(i + 1) * bin_h, j * bin_w:(j + 1) * bin_w]
+            gabor_k = cv2.getGaborKernel((21, 21), 4.0, 0, 10.0, 0.5, 0, ktype=cv2.CV_32F)
+            filtered = cv2.filter2D(patch, cv2.CV_8UC3, gabor_k)
+            std = np.std(filtered)
+            texture_map.append(std)
 
-    avg_std = np.mean(stds)
-    diversity = np.std(stds)
+    avg_texture = np.mean(texture_map)
 
-    if avg_std > 14 and diversity > 3:
-        return "📍 지문 전체적으로 질감이 풍부하며, 구역 간 차이도 큽니다. 감정이 섬세하고 복합적이며, 상황에 따라 다양한 얼굴을 가집니다."
-    elif avg_std > 10:
-        return "📍 질감이 일정하면서도 적절한 다양성이 있습니다. 감정 표현이 안정적이면서 유연합니다."
+    if avg_texture > 12:
+        return "📍 지문의 결은 영역만능 풍보하고 다양한 편입니다. 감각이 설명하며 다면적인 감정 반응을 보이는 건호가 있습니다."
     else:
-        return "📍 전반적으로 질감이 균일하고 단순합니다. 감정을 일정하게 유지하며, 변화에 조심스럽게 반응합니다."
+        return "📍 지문의 결이 전망적으로 긴일하며 일관된 성향을 보여줍니다. 감정을 일정하게 유지하려는 건호가 있습니다."
 
 def deep_summarize_fingerprint(gray_img):
     try:
         # 대비 & 명암 보정
         gray = correct_shadow(gray_img)
 
-        # ⭕ 윤곽 추출
+        # ⭕ 유가 추출
         edges = cv2.Canny(gray, 50, 150)
 
-        # 📊 선 밀도 분석
+        # 파이드 물분률
         radial = radial_density(gray, num_bins=8)
         density_text = interpret_densities(radial)
 
-        # 🔍 질감 분석
+        # 지문 결(진홍) 분석
         texture_text = interpret_texture_segmented(gray, num_bins=8)
         texture_std = round(np.std(gray), 3)
 
-        # 🌱 Ridge 강조 필터
+        # Ridge 강조
         if gray.shape[0] > 512 or gray.shape[1] > 512:
             gray_resized = cv2.resize(gray, (512, 512))
         else:
             gray_resized = gray
-        gray_norm = gray_resized.astype(np.float32) / 255.0
 
-        frangi_img = frangi(gray_norm)
-        sato_img = sato(gray_norm)
-
-        frangi_mean = np.mean(frangi_img[frangi_img > 0.01])
-        sato_mean = np.mean(sato_img[sato_img > 0.01])
+        frangi_img = frangi(gray_resized / 255.0)
+        sato_img = sato(gray_resized / 255.0)
         ridge_mean = {
-            "Frangi": round(frangi_mean, 4),
-            "Sato": round(sato_mean, 4)
+            "Frangi": round(np.mean(frangi_img), 4),
+            "Sato": round(np.mean(sato_img), 4)
         }
 
-        # ↗️ 방향 분석
-        sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=5)
-        sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=5)
-        orientation = np.degrees(np.arctan2(sobely, sobelx))
+        # 향 범지 분석
+        orientation = np.degrees(np.arctan2(
+            cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=5),
+            cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=5)
+        ))
         avg_angle = round(np.nanmean(orientation), 2)
 
-        # 최종 요약 텍스트
-        summary_text = f"{density_text}\n{texture_text}\n📐 평균 방향 각도: {avg_angle}도"
+        # 요약 문장
+        summary_text = f"{density_text}\n{texture_text}\n🖐️ 평균 방향 각도: {avg_angle}도"
 
         return summary_text, {
             "radial": radial,
