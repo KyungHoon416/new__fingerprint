@@ -131,33 +131,6 @@ def analyze_tree():
         print(traceback.format_exc())
         return jsonify({"result": f"❌ 서버 오류: {str(e)}"}), 500
 
-
-# # ✅ Vercel이 호출할 수 있는 GET 기반 결과 API
-# @app.route("/analyze", methods=["GET"])
-# def get_analysis_result():
-#     try:
-#         name = request.args.get("name")
-#         phone = request.args.get("phone")
-
-#         records = SHEET.get_all_values()
-#         headers = records[0]
-#         rows = records[1:]
-
-#         for row in rows:
-#             if row[2] == name and row[3] == phone:
-#                 return jsonify({
-#                     "thumb": row[8],
-#                     "index": row[9],
-#                     "tree_desc": row[10],
-#                     "tree_image": row[11]
-#                 })
-
-#         return jsonify({"error": "❌ 일치하는 정보를 찾을 수 없습니다."}), 404
-
-#     except Exception as e:
-#         print("❌ 결과 조회 오류:", str(e))
-#         return jsonify({"error": f"❌ 서버 오류: {str(e)}"}), 500
-    
     
     
 @app.route("/")

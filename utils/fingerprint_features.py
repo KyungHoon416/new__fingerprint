@@ -13,7 +13,7 @@ def radial_density(gray_img, num_rings=5):
     h, w = gray_img.shape
     center = (w // 2, h // 2)
     max_radius = int(np.hypot(w, h) / 2)
-    edges = cv2.Canny(gray_img, 100, 200)
+    edges = cv2.Canny(gray_img, 50, 150)
     results = []
     for i in range(num_rings):
         r1 = int(i * max_radius / num_rings)
@@ -99,29 +99,29 @@ def deep_summarize_fingerprint(gray_img):
         avg_angle = round(np.nanmean(orientation), 2)
 
         # 🎨 시각화
-        plt.figure(figsize=(12, 6))
-        plt.subplot(1, 4, 1)
-        plt.imshow(gray, cmap='gray')
-        plt.title("1. 원본 (보정 후)")
-        plt.axis('off')
+        # plt.figure(figsize=(12, 6))
+        # plt.subplot(1, 4, 1)
+        # plt.imshow(gray, cmap='gray')
+        # plt.title("1. 원본 (보정 후)")
+        # plt.axis('off')
 
-        plt.subplot(1, 4, 2)
-        plt.imshow(edges, cmap='gray')
-        plt.title("2. Canny 윤곽선")
-        plt.axis('off')
+        # plt.subplot(1, 4, 2)
+        # plt.imshow(edges, cmap='gray')
+        # plt.title("2. Canny 윤곽선")
+        # plt.axis('off')
 
-        plt.subplot(1, 4, 3)
-        plt.imshow(frangi_img, cmap='gray')
-        plt.title("3. Frangi Ridge")
-        plt.axis('off')
+        # plt.subplot(1, 4, 3)
+        # plt.imshow(frangi_img, cmap='gray')
+        # plt.title("3. Frangi Ridge")
+        # plt.axis('off')
 
-        plt.subplot(1, 4, 4)
-        plt.imshow(sato_img, cmap='gray')
-        plt.title("4. Sato Ridge")
-        plt.axis('off')
+        # plt.subplot(1, 4, 4)
+        # plt.imshow(sato_img, cmap='gray')
+        # plt.title("4. Sato Ridge")
+        # plt.axis('off')
 
-        plt.tight_layout()
-        plt.show()
+        # plt.tight_layout()
+        # plt.show()
 
         # 최종 텍스트 요약
         summary_text = f"{density_text}\n{texture_text}\n📐 평균 방향 각도: {avg_angle}도"
@@ -132,7 +132,6 @@ def deep_summarize_fingerprint(gray_img):
             "ridge_mean": ridge_mean,
             "avg_angle": avg_angle
         }
-
     except Exception as e:
         print(f"❌ [deep_summarize_fingerprint] 오류: {e}")
         raise e
