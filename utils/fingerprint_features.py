@@ -7,7 +7,6 @@ from skimage.feature import hessian_matrix, hessian_matrix_eigvals
 from skimage.filters.rank import entropy
 from skimage.morphology import disk
 from .preprocessor import correct_shadow  # 그림자 제거 (있다면)
-import matplotlib.pyplot as plt
 
 def radial_density(gray_img, num_rings=5):
     h, w = gray_img.shape
@@ -84,8 +83,15 @@ def deep_summarize_fingerprint(gray_img):
         texture_std = round(np.std(gray), 3)
 
         # 🌱 Ridge 강조 필터
-        frangi_img = frangi(gray / 255.0)
-        sato_img = sato(gray / 255.0)
+        # 이미지 축소 (512 이하로)
+        if gray.shape[0] > 512 or gray.shape[1] > 512:
+            gray_resized = cv2.resize(gray, (512, 512))
+        else:
+            gray_resized = gray
+
+        # Ridge 분석
+        frangi_img = frangi(gray_resized / 255.0)
+        sato_img = sato(gray_resized / 255.0)
         ridge_mean = {
             "Frangi": round(np.mean(frangi_img), 4),
             "Sato": round(np.mean(sato_img), 4)
