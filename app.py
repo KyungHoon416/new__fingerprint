@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from utils.image_decode import decode_image
-from utils.fingerprint_features import summarize_fingerprint
 from utils.fingerprint_features import deep_summarize_fingerprint
 from gpt import build_prompt_thumb, call_gpt_mini ,build_prompt_index
 from utils.telegram_bot import send_telegram_result
