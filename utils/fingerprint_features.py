@@ -2,6 +2,12 @@
 import cv2
 import numpy as np
 from utils.image_decode import decode_image  # ✅ 여기로부터 가져옴
+from skimage.filters import meijering, frangi, sato
+from skimage.feature import hessian_matrix, hessian_matrix_eigvals
+from skimage.filters.rank import entropy
+from skimage.morphology import disk
+from .preprocessor import correct_shadow  # 그림자 제거 (있다면)
+import matplotlib.pyplot as plt
 
 def radial_density(gray_img, num_rings=5):
     h, w = gray_img.shape
@@ -58,4 +64,75 @@ def summarize_fingerprint(gray_img):  # 이미 디코딩된 numpy 이미지가 �
 
     except Exception as e:
         print(f"❌ 이미지 처리 중 오류: {e}")
+        raise e
+
+
+def deep_summarize_fingerprint(gray_img):
+    try:
+        # 대비 & 명암 보정
+        gray = correct_shadow(gray_img)
+
+        # ⭕ 윤곽 추출
+        edges = cv2.Canny(gray, 50, 150)
+
+        # 📊 선 밀도 분석
+        radial = radial_density(gray)
+        density_text = interpret_densities(radial)
+
+        # 🔍 질감 분석
+        texture_text = interpret_texture(gray)
+        texture_std = round(np.std(gray), 3)
+
+        # 🌱 Ridge 강조 필터
+        frangi_img = frangi(gray / 255.0)
+        sato_img = sato(gray / 255.0)
+        ridge_mean = {
+            "Frangi": round(np.mean(frangi_img), 4),
+            "Sato": round(np.mean(sato_img), 4)
+        }
+
+        # ↗️ 방향 분석
+        orientation = np.degrees(np.arctan2(
+            cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=5),
+            cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=5)
+        ))
+        avg_angle = round(np.nanmean(orientation), 2)
+
+        # 🎨 시각화
+        plt.figure(figsize=(12, 6))
+        plt.subplot(1, 4, 1)
+        plt.imshow(gray, cmap='gray')
+        plt.title("1. 원본 (보정 후)")
+        plt.axis('off')
+
+        plt.subplot(1, 4, 2)
+        plt.imshow(edges, cmap='gray')
+        plt.title("2. Canny 윤곽선")
+        plt.axis('off')
+
+        plt.subplot(1, 4, 3)
+        plt.imshow(frangi_img, cmap='gray')
+        plt.title("3. Frangi Ridge")
+        plt.axis('off')
+
+        plt.subplot(1, 4, 4)
+        plt.imshow(sato_img, cmap='gray')
+        plt.title("4. Sato Ridge")
+        plt.axis('off')
+
+        plt.tight_layout()
+        plt.show()
+
+        # 최종 텍스트 요약
+        summary_text = f"{density_text}\n{texture_text}\n📐 평균 방향 각도: {avg_angle}도"
+
+        return summary_text, {
+            "radial": radial,
+            "texture_std": texture_std,
+            "ridge_mean": ridge_mean,
+            "avg_angle": avg_angle
+        }
+
+    except Exception as e:
+        print(f"❌ [deep_summarize_fingerprint] 오류: {e}")
         raise e

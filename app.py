@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 from utils.image_decode import decode_image
 from utils.fingerprint_features import summarize_fingerprint
-from gpt import build_prompt, call_gpt_mini
+from utils.fingerprint_features import deep_summarize_fingerprint
+from gpt import build_prompt_thumb, call_gpt_mini ,build_prompt_index
 from utils.telegram_bot import send_telegram_result
-from utils.select_tree_from_text import select_tree_from_text
+from utils.select_tree_from_text import select_tree_from_text,hybrid_select_tree
 from utils.send_to_sheet import send_tree_info_to_sheet  # ✅ 구글 시트 연동 함수 추가
 import traceback
 import gspread
@@ -42,12 +43,15 @@ SHEET = GSPREAD_CLIENT.open("Code Lab 지문(응답)").worksheet("설문지 응�
 def analyze_thumb():
     try:
         data = request.get_json()
+        name = request.args.get("name")
         base64_str = data.get("image")
 
         gray_img = decode_image(base64_str)
-        summary, _ = summarize_fingerprint(gray_img)
+        summary, metrics = deep_summarize_fingerprint(gray_img)
 
-        prompt = build_prompt(summary, "")
+        # 이후 metrics['radial'], metrics['ridge_mean'] 등으로 접근
+
+        prompt = build_prompt_thumb(summary, metrics, name)
         result = call_gpt_mini(prompt)
 
         return jsonify({"result_thumb": result})
@@ -57,16 +61,18 @@ def analyze_thumb():
         print(traceback.format_exc())
         return jsonify({"result": f"❌ 서버 오류: {str(e)}"}), 500
 
+
 @app.route("/analyze/index", methods=["POST"])
 def analyze_index():
     try:
         data = request.get_json()
+        name = request.args.get("name")
         base64_str = data.get("image")
 
         gray_img = decode_image(base64_str)
-        summary, _ = summarize_fingerprint(gray_img)
+        summary, metrics = deep_summarize_fingerprint(gray_img)
 
-        prompt = build_prompt("", summary)
+        prompt = build_prompt_index(summary, metrics, name)
         result = call_gpt_mini(prompt)
 
         return jsonify({"result_index": result})
@@ -76,16 +82,33 @@ def analyze_index():
         print(traceback.format_exc())
         return jsonify({"result": f"❌ 서버 오류: {str(e)}"}), 500
 
+
 @app.route("/analyze/tree", methods=["POST"])
 def analyze_tree():
     try:
         data = request.get_json()
+
+        # 텍스트 요약
         thumb_result = data.get("thumb_result", "")
         index_result = data.get("index_result", "")
 
-        tree_info = select_tree_from_text(thumb_result, index_result)
+        # 수치 분석 값들
+        radial = data.get("radial", [])
+        texture_std = data.get("texture_std", 0.0)
+        ridge_mean = data.get("ridge_mean", {})
+        avg_angle = data.get("avg_angle", 0.0)
 
-        # 선택적으로 텔레그램으로 간단 메시지만 전송 (원할 경우)
+        # 🧠 하이브리드 분석 기반 트리 유형 선택
+        tree_info = hybrid_select_tree(
+            thumb_text=thumb_result,
+            index_text=index_result,
+            radial=radial,
+            texture_std=texture_std,
+            ridge_mean=ridge_mean,
+            avg_angle=avg_angle
+        )
+
+        # ✅ 텔레그램 간단 메시지 전송 (선택)
         message = f"""
 🌲 *당신을 담은 나무: {tree_info['name']}*
 {tree_info['desc']}
@@ -95,18 +118,19 @@ def analyze_tree():
 """
         send_telegram_result(message)
 
-        # 응답에 필요한 최소 정보만 전달
+        # ✅ 클라이언트 응답
         return jsonify({
             "tree_name": tree_info["name"],
             "tree_desc": tree_info["desc"],
             "image_hint": tree_info["image_hint"],
-            "result": "✅ 요약 분석 완료"
+            "result": "✅ 트리 분석 완료"
         })
 
     except Exception as e:
-        print("❌ 서버 내부 오류 (요약):", str(e))
+        print("❌ 서버 내부 오류 (트리 분석):", str(e))
         print(traceback.format_exc())
         return jsonify({"result": f"❌ 서버 오류: {str(e)}"}), 500
+
 
 # # ✅ Vercel이 호출할 수 있는 GET 기반 결과 API
 # @app.route("/analyze", methods=["GET"])
