@@ -34,6 +34,10 @@ def select_tree_from_metrics(radial, texture_std, ridge_mean, avg_angle):
         "플라타너스": 0.0,
     }
 
+    # ✅ 방어 코드 추가
+    if not radial or len(radial) < 2:
+        return "느티나무", 0.1
+
     center_density = radial[0]
     outer_density = sum(radial[1:]) / (len(radial) - 1)
 
@@ -48,12 +52,12 @@ def select_tree_from_metrics(radial, texture_std, ridge_mean, avg_angle):
     if ridge_mean > 0.09 or abs(avg_angle) > 25:
         score["플라타너스"] += 1.0
 
-    # 모든 점수가 0이면 기본 트리 반환
     if all(v == 0.0 for v in score.values()):
         return "느티나무", 0.1
 
     best_tree = max(score, key=score.get)
     return best_tree, score[best_tree]
+
 
 
 
@@ -80,8 +84,6 @@ def hybrid_select_tree(thumb_text, index_text, radial, texture_std, ridge_mean, 
         "desc": "감정을 잘 조절하고 내면의 중심이 단단한 사람입니다.",
         "image_hint": "넓게 퍼진 가지와 깊은 뿌리, 안정된 중심 구조",
     })
-
-
 
 
 def get_tree_profiles():
